@@ -1,0 +1,130 @@
+/* Write your CSS here */
+.bg-container {
+  background-image: linear-gradient(to right, #ffffff, #cffcf1);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.inner-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.title {
+  font-size: 50px;
+  font-family: 'Roboto';
+  font-weight: 800;
+  color: #0f172a;
+  text-align: center;
+}
+
+.timer-container {
+  background-image: url('https://assets.ccbp.in/frontend/react-js/digital-timer-elapsed-bg.png');
+  background-size: cover;
+  width: 450px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+.time-card {
+  background-color: #ffffff;
+  border-radius: 180px;
+  width: 120px;
+  height: 120px;
+  text-align: center;
+  padding: 0px;
+  margin-left: 50px;
+}
+.time-text {
+  font-size: 27px;
+  font-family: 'Roboto';
+  font-weight: bold;
+  color: #00d9f5;
+}
+.time-status {
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'Roboto';
+  color: #0f172a;
+}
+.timer-status-and-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.timer-text-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.timer-status-container {
+  display: flex;
+  flex-direction: row;
+}
+.status {
+  font-family: 'Roboto';
+  font-size: 20px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-top: 10px;
+}
+.image {
+  height: 50px;
+  width: 50px;
+  margin-left: 30px;
+}
+.btn {
+  background-color: transparent;
+  height: fit-content;
+  width: fit-content;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+.timer-btn {
+  height: fit-content;
+  width: fit-content;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 30px;
+  color: #0f172a;
+  font-size: 25px;
+  background-color: transparent;
+}
+.timer-text {
+  background-image: linear-gradient(to right, #07e7af, #00d9f5);
+  background-size: cover;
+  height: 40px;
+  width: 40px;
+  font-size: 18px;
+  font-weight: 500;
+  font-style: 'Roboto';
+  border-radius: 5px;
+  text-align: center;
+  margin: 20px;
+}
+.time-change-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.timer-set-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.set-time {
+  font-size: 15px;
+  font-weight: 700;
+  font-style: 'Roboto';
+  color: #0f172a;
+}
