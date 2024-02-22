@@ -1,84 +1,78 @@
-// Write your code here
 import {Component} from 'react'
 import './index.css'
 
 class DigitalTimer extends Component {
   state = {
-    isClick: false,
+    isRunning: false,
     minutes: 25,
     seconds: 0,
   }
 
-  componentDidMount() {
-    const {isClick} = this.state
-    let {seconds, minutes} = this.state
+  timerId = null
 
-    if (isClick === true) {
-      const timerId = setInterval(() => {
-        if (seconds === 0) {
-          seconds = 59
-          minutes -= 1
-        }
-        if (seconds !== 0) {
-          seconds -= 1
-          if (seconds < 10) {
-            seconds = `0 ${seconds}`
-          }
-        } else {
-          minutes -= 1
-          if (minutes < 10) {
-            minutes = `0${minutes}`
-          }
-        }
+  componentWillUnmount = () => {
+    clearInterval(this.timerId)
+  }
 
-        this.setState({
-          minutes,
-          seconds,
-        })
-      }, 1000)
+  startTimer = () => {
+    const {isRunning} = this.state
+    if (!isRunning) {
+      this.setState({isRunning: true})
+      this.timerId = setInterval(this.tick, 1000)
     }
   }
 
-  componentWillUnmount() {
-    const {isClick} = this.state
-    const {minutes, seconds} = this.state
-    if (isClick === false) {
-      clearInterval(this.componentDidMount.timerId)
-    }
-    if (seconds === 0 && minutes === 0) {
-      clearInterval(this.startTimer.timerId)
-      this.setState({minutes: '00', seconds: '00'})
+  pauseTimer = () => {
+    const {isRunning} = this.state
+    if (isRunning) {
+      clearInterval(this.timerId)
+      this.setState({isRunning: false})
     }
   }
 
   resetTimer = () => {
-    clearInterval(this.componentDidMount.timerId)
-    this.setState({minutes: 25, seconds: 0})
+    clearInterval(this.timerId)
+    this.setState({minutes: 25, seconds: 0, isRunning: false})
   }
 
   increaseTime = () => {
-    const {minutes} = this.state
-    this.setState({minutes: minutes + 1})
+    const {isRunning, minutes} = this.state
+    if (!isRunning) {
+      this.setState({minutes: minutes + 1})
+    }
   }
 
   decreaseTime = () => {
-    const {minutes} = this.state
-    this.setState({minutes: minutes - 1})
+    const {isRunning, minutes} = this.state
+    if (!isRunning && minutes > 0) {
+      this.setState({minutes: minutes - 1})
+    }
   }
 
-  toggleIsClick = () => {
-    const {isClick} = this.state
-    this.setState({isClick: !isClick})
-    console.log(isClick)
-    if (isClick) this.componentDidMount()
-    else this.componentWillUnmount()
+  tick = () => {
+    const {seconds, minutes} = this.state
+    if (seconds === 0) {
+      if (minutes === 0) {
+        this.resetTimer()
+        return
+      }
+      this.setState(prevState => ({
+        minutes: prevState.minutes - 1,
+        seconds: 59,
+      }))
+    } else {
+      this.setState(prevState => ({
+        seconds: prevState.seconds - 1,
+      }))
+    }
   }
 
   render() {
-    const {isClick, minutes, seconds} = this.state
-    const imgUrl = isClick
-      ? 'https://assets.ccbp.in/frontend/react-js/play-icon-img.png '
-      : 'https://assets.ccbp.in/frontend/react-js/pause-icon-img.png'
+    const {isRunning, minutes, seconds} = this.state
+    const timerText = `${minutes < 10 ? `0${minutes}` : minutes}:${
+      seconds < 10 ? `0${seconds}` : seconds
+    }`
+    const timerStatus = isRunning ? 'Running' : 'Paused'
 
     return (
       <div className="bg-container">
@@ -86,10 +80,8 @@ class DigitalTimer extends Component {
         <div className="inner-container">
           <div className="timer-container">
             <div className="time-card">
-              <p className="time-text">
-                {minutes}:{seconds === 0 ? '00' : seconds}
-              </p>
-              <p className="time-status">{isClick ? 'Paused' : 'Running'}</p>
+              <h1 className="time-text">{timerText}</h1>
+              <p className="time-status">{timerStatus}</p>
             </div>
           </div>
           <div className="timer-status-and-text-container">
@@ -97,27 +89,35 @@ class DigitalTimer extends Component {
               <div className="timer-status-container">
                 <button
                   type="button"
-                  className="btn"
-                  onClick={this.toggleIsClick}
+                  className="btn status"
+                  onClick={isRunning ? this.pauseTimer : this.startTimer}
                 >
                   <img
-                    src={imgUrl}
+                    src={
+                      isRunning
+                        ? 'https://assets.ccbp.in/frontend/react-js/pause-icon-img.png'
+                        : 'https://assets.ccbp.in/frontend/react-js/play-icon-img.png'
+                    }
                     className="image"
-                    alt={isClick ? 'pause icon' : 'play icon'}
+                    alt={isRunning ? 'pause icon' : 'play icon'}
                   />
+                  {isRunning ? 'Pause' : 'Start'}
                 </button>
-                <p className="status">{isClick ? 'Paused' : 'Start'}</p>
               </div>
 
               <div className="timer-text-container">
-                <button type="button" className="btn" onClick={this.resetTimer}>
+                <button
+                  type="button"
+                  className="btn status"
+                  onClick={this.resetTimer}
+                >
                   <img
                     src="https://assets.ccbp.in/frontend/react-js/reset-icon-img.png"
                     className="image"
                     alt="reset icon"
                   />
+                  Reset
                 </button>
-                <p className="status">Reset</p>
               </div>
             </div>
             <div className="timer-set-container">
@@ -127,7 +127,7 @@ class DigitalTimer extends Component {
                   type="button"
                   className="timer-btn"
                   onClick={this.decreaseTime}
-                  disabled={seconds > 0}
+                  disabled={isRunning || minutes === 0}
                 >
                   -
                 </button>
@@ -136,7 +136,7 @@ class DigitalTimer extends Component {
                   type="button"
                   className="timer-btn"
                   onClick={this.increaseTime}
-                  disabled={seconds > 0}
+                  disabled={isRunning}
                 >
                   +
                 </button>
@@ -148,4 +148,5 @@ class DigitalTimer extends Component {
     )
   }
 }
+
 export default DigitalTimer
